@@ -55,6 +55,46 @@ struct Node
 
 		return newHead;
 	}
+
+	static Node* Reverse(Node* head)
+	{
+		Node* pp = 0;
+		while (head)
+		{
+			Node* tmp = head->next;
+			head->next = pp;
+			pp = head;
+			head = tmp;
+		}
+		return pp;
+	}
+
+	static bool IsPalindrome(Node* head)
+	{
+		if (!head || !head->next) return true;
+
+		bool res;
+		Node* p1 = head, *p2 = head;
+		while (p2 && p2->next) {
+			p1 = p1->next;
+			p2 = p2->next->next;
+		}
+
+		Node* phead1 = head;
+		Node* phead2 = Node::Reverse(p2 ? p1 : p1->next);
+		Node* pp = phead2;
+		while (pp)
+		{
+			if (pp->value != phead1->value)
+				break;
+			pp = pp->next;
+			phead1 = phead1->next;
+		}
+
+		res = pp == 0;
+		Node::Reverse(phead2);
+		return res;
+	}
 };
 
 Node* InitList()
@@ -62,23 +102,43 @@ Node* InitList()
 	return new Node(1, new Node(2, new Node(3, new Node(4, new Node(5, new Node(6))))));
 }
 
+Node* InitPalindromeListEven()
+{
+	return new Node(1, new Node(2, new Node(3, new Node(3, new Node(2, new Node(1))))));
+}
+
+Node* InitPalindromeListOdd()
+{
+	return new Node(1, new Node(2, new Node(3, new Node(2, new Node(1)))));
+}
+
 
 int main()
 {
-	Node* head = InitList();
-
-	cout << "Original list:      ";
+	Node* head = InitPalindromeListEven();
 	Node::Print(head);
 
-	/*cout << "Reverse pair SWAP:  ";
-	Node::ReverseInPairsValueSwap(head);
+	if (Node::IsPalindrome(head))
+		cout << "Palindrome" << endl;
+	else
+		cout << "NOT palindrome" << endl;
 	Node::Print(head);
 
-	Node::Clear(head);
-	head = InitList();*/
-
-	cout << "Reverse pair NODES: ";
-	head = Node::ReverseInPairs(head);
+	head = InitPalindromeListOdd();
 	Node::Print(head);
+	if (Node::IsPalindrome(head))
+		cout << "Palindrome" << endl;
+	else
+		cout << "NOT palindrome" << endl;
+	Node::Print(head);
+
+	head = InitList();
+	Node::Print(head);
+	if (Node::IsPalindrome(head))
+		cout << "Palindrome" << endl;
+	else
+		cout << "NOT palindrome" << endl;
+	Node::Print(head);
+
 	Node::Clear(head);
 }
