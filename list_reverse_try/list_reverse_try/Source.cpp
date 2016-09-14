@@ -94,6 +94,12 @@ struct Node
 		Node::Reverse(phead2);
 		return pp == 0;
 	}
+
+	// TODO
+	static Node* ReverseBlocksOfKNodes(Node* head)
+	{
+		return 0;
+	}
 };
 
 Node* InitList()
