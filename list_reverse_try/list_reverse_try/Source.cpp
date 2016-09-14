@@ -91,9 +91,8 @@ struct Node
 			phead1 = phead1->next;
 		}
 
-		res = pp == 0;
 		Node::Reverse(phead2);
-		return res;
+		return pp == 0;
 	}
 };
 
