@@ -40,10 +40,10 @@ public:
         return tail;
     }
 
-    Node* pushFront(Node* val) {
-        val->prev = nullptr;
-        val->next = head;
-        head = val;
+    Node* pushFront(Node* const pNode) {
+        pNode->prev = nullptr;
+        pNode->next = head;
+        head = pNode;
 
         if (head->next != nullptr) {
             head->next->prev = head;
@@ -56,7 +56,7 @@ public:
         return head;
     }
 
-    void removeNode(Node* pNode) {
+    void removeNode(Node* const pNode) {
         if (pNode->prev != nullptr) {
             pNode->prev->next = pNode->next;
         }

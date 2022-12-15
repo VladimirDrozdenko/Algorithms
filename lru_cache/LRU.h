@@ -22,31 +22,42 @@ public:
     void put(const K& key, const V& value) {
         auto itr = table.find(key);
         if (itr == table.cend()) {
-            if (table.size() == N + 1) {
+            if (table.size() == N) {
+                // remove the oldest value
                 auto tail = seq.getTail();
                 seq.removeNode(seq.getTail());
                 table.erase(tail->value.first);
             }
-            auto pn = seq.pushFront(new typename List<std::pair<K, V>>::Node(std::make_pair(key, value)));
-            table.insert(std::make_pair(key, pn));
+
+            // add a new value to the top of the cache
+            auto pNode = seq.pushFront(new typename List<std::pair<K, V>>::Node(std::make_pair(key, value)));
+            table.insert(std::make_pair(key, pNode));
         } else {
-            itr->second->value = std::make_pair(key, value);
+            // ensure it is the first one in the list
+            auto pNode = itr->second;
+            if (seq.getHead() != pNode) {
+                seq.removeNode(pNode);
+                seq.pushFront(pNode);
+            }
+
+            // update existing value
+            pNode->value = std::make_pair(key, value);
         }
     }
 
-    const V* get(K key) {
+    const V* get(const K& key) {
         auto itr = table.find(key);
         if (itr == table.cend()) {
             return nullptr;
         }
 
-        typename List<std::pair<K, V>>::Node* node = itr->second;
-        if (node != seq.getHead()) {
-            seq.removeNode(node);
-            seq.pushFront(node);
+        typename List<std::pair<K, V>>::Node* pNode = itr->second;
+        if (pNode != seq.getHead()) {
+            seq.removeNode(pNode);
+            seq.pushFront(pNode);
         }
 
-        return &(node->value.second);
+        return &(pNode->value.second);
     }
 };
 
