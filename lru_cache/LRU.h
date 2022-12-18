@@ -13,7 +13,7 @@ class LRU {
 private:
     size_t N;
     std::unordered_map<K, typename List<std::pair<K, V>>::Node*> table;
-    List<std::pair<K, V>> seq;
+    List<typename std::pair<K, V>> seq;
     
 public:
     explicit LRU(size_t size) : N(size) {
